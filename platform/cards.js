@@ -13,16 +13,11 @@ Deck.prototype.remove = function(arr, idx) {
 
 Deck.prototype.shuffle = function() {
 	var newArr = [];
-	for(var i = 0; i < this.cards.length; i++) {
+	for(var i = 0; i < 52; i++) {
 		var idx = Math.floor(Math.random()*this.cards.length);
 		newArr.push(this.remove(this.cards, idx));
 	}
 	this.cards = newArr;
-}
-
-Deck.prototype.deal = function() {
-	var idx = Math.floor(Math.random()*this.cards.length);
-	return this.remove(this.cards, idx);
 }
 
 Deck.prototype.reset = function() {
@@ -64,6 +59,5 @@ Deck.prototype.print = function() {
 }
 
 var deck = new Deck();
-deck.shuffle();
-deck.print();
 deck.reset();
+deck.shuffle();
