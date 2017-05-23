@@ -2,8 +2,16 @@ var game = {
 	players: [],
 	addPlayer: function(name){
 		this.players.push(playerConstructor(name));
+	},
+	cards: [],
+	getCards: function() {
+		$.ajax({
+			url: "http://pokeapi.co/api/v1/pokemon/",
+		})
+		.done(function(msg) {
+			return msg;
+		});
 	}
-
 }
 
 function playerConstructor(name){
@@ -33,8 +41,7 @@ function playerConstructor(name){
 
 game.addPlayer("Jack");
 game.addPlayer("Jon");
-game.players[0].getCard();
-game.players[1].getCard();
+game.getCards();
 
 for(let i = 1; i < game.players.length+1; i++) {
 	console.log(game.players[i-1].hand);
