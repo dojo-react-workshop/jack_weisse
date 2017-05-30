@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Composable Squares</title>
+	    <script src="./node_modules/react/dist/react.js"></script>
+	    <script src="./node_modules/react-dom/dist/react-dom.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+	</head>
+	<body>
+		<div id="container">
+		</div>
+		<script type="text/javascript">
+			let container = document.getElementById("container");
+
+			function render(colorData) {
+				ReactDOM.render(
+				React.createElement("div",null,
+					React.createElement(App, {squares:colorData}),
+					React.createElement("button",buttonPress,"Click Me!")
+				),container);
+			}
+
+			function App(props) {
+				let boxWidth = 200;
+				let results = props.squares.map((el)=>{
+					let key = el.bgColor+el.textColor;
+					el.key = key;
+					el.width = boxWidth;
+					return Square(el);
+				})
+				let width = results.length * boxWidth;
+
+				return React.createElement("div",{style: {height: 200, width: width, margin: "auto auto", border: "thin solid black"}},[...results]);
+			}
+
+			function Square(props) {
+				let {bgColor, textColor, width, key} = props;
+				let text = `${textColor} on ${bgColor}`;
+				let style = {backgroundColor: bgColor, color: textColor, height: 200, width: width, display: "inline-block", verticalAlign: "top", fontSize: 30, textAlign: "center", boxSizing: "border-box"};
+				return React.createElement("div",{style:style,key:key},text);
+			}
+
+			const buttonPress = {
+				onClick(){
+					function getRndmClr() {
+						function rdmClr() {
+							return Math.floor(Math.random()*256);
+						}
+						let color = "rgb("+rdmClr()+", "+rdmClr()+", "+rdmClr()+")";
+						return color;
+					}
+					const squareData = [{bgColor:getRndmClr(),textColor:getRndmClr()},
+							 			{bgColor:getRndmClr(),textColor:getRndmClr()},
+							 			{bgColor:getRndmClr(),textColor:getRndmClr()}];
+					render(squareData);
+				}
+			}
+
+			ReactDOM.render(
+				React.createElement("div",null,
+					React.createElement(App, {squares:[{bgColor:"blue",textColor:"white"},
+						 {bgColor:"red",textColor:"blue"},
+						 {bgColor:"pink",textColor:"green"}]}),
+					React.createElement("button",buttonPress,"Click Me!")
+				),container);
+
+
+		</script>
+	</body>
+</html>

@@ -18,9 +18,8 @@
 					return React.createElement("li",{key:key},text);
 				}
 				const {items} = props;
-				let results = [];
-				items.forEach((el,idx)=>{
-					results.push(ListItem({text:el,key:idx}));
+				let results = items.map((el,idx)=>{
+					return ListItem({text:el,key:idx});
 				});
 				return React.createElement("ul",null,[...results]);
 			}
@@ -33,9 +32,9 @@
 
 			ReactDOM.render(
 				React.createElement("div",{className: "wrapper"},
-					Header({tag: "h1",text:"Hello Dojo!"}),
-					Header({tag: "h3",text:"Things I need to do:"}),
-					List({items:["Learn React","Climb Mt. Everest","Run a marathon","Feed the dogs"]})
+					React.createElement(Header,{tag: "h1",text:"Hello Dojo!"}),
+					React.createElement(Header,{tag: "h3",text:"Things I need to do:"}),
+					React.createElement(List,{items:["Learn React","Climb Mt. Everest","Run a marathon","Feed the dogs"]})
 					),
 				container);
 		</script>
