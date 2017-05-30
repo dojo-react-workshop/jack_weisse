@@ -10,20 +10,32 @@
 		</div>
 		<script type="text/javascript">
 			let container = document.getElementById("root");
+
+			function List(props) {
+				function ListItem(props) {
+					const {text} = props;
+					const {key} = props;
+					return React.createElement("li",{key:key},text);
+				}
+				const {items} = props;
+				let results = [];
+				items.forEach((el,idx)=>{
+					results.push(ListItem({text:el,key:idx}));
+				});
+				return React.createElement("ul",null,[...results]);
+			}
+
+			function Header(props) {
+				const {text} = props;
+				const {tag} = props;
+				return React.createElement(tag,null,text);
+			}
+
 			ReactDOM.render(
-				React.createElement(
-					"div",
-					{className: "wrapper"},
-					React.createElement("h1",null,"Hello Dojo!"),
-					React.createElement("h3",null,"Things I need to do:"),
-					React.createElement(
-						"ul",
-						null,
-						React.createElement("li",null,"Learn React"),
-						React.createElement("li",null,"Climb Mt. Everest"),
-						React.createElement("li",null,"Run a marathon"),
-						React.createElement("li",null,"Feed the dogs")
-						)
+				React.createElement("div",{className: "wrapper"},
+					Header({tag: "h1",text:"Hello Dojo!"}),
+					Header({tag: "h3",text:"Things I need to do:"}),
+					List({items:["Learn React","Climb Mt. Everest","Run a marathon","Feed the dogs"]})
 					),
 				container);
 		</script>
