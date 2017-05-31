@@ -9,7 +9,7 @@
 	<body>
 		<div id="container">
 		</div>
-		<script type="text/javascript">
+		<script type="text/babel">
 			let container = document.getElementById("container");
 
 			function render(colorData) {
@@ -29,15 +29,18 @@
 					return Square(el);
 				})
 				let width = results.length * boxWidth;
+				let style = {height: 200, width: width, margin: "auto auto", border: "thin solid black"};
 
-				return React.createElement("div",{style: {height: 200, width: width, margin: "auto auto", border: "thin solid black"}},[...results]);
+				// return React.createElement("div",{style: {height: 200, width: width, margin: "auto auto", border: "thin solid black"}},[...results]);
+				return <div style={style}>{[...results]}</div>;
 			}
 
 			function Square(props) {
 				let {bgColor, textColor, width, key} = props;
 				let text = `${textColor} on ${bgColor}`;
 				let style = {backgroundColor: bgColor, color: textColor, height: 200, width: width, display: "inline-block", verticalAlign: "top", fontSize: 30, textAlign: "center", boxSizing: "border-box"};
-				return React.createElement("div",{style:style,key:key},text);
+				// return React.createElement("div",{style:style,key:key},text);
+				return <div style={style} key={key}>{text}</div>;
 			}
 
 			const buttonPress = {
@@ -63,7 +66,6 @@
 						 {bgColor:"pink",textColor:"green"}]}),
 					React.createElement("button",buttonPress,"Click Me!")
 				),container);
-
 
 		</script>
 	</body>
