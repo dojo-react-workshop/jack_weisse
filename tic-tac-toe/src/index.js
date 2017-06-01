@@ -21,8 +21,23 @@ class GameView extends React.Component {
 		};
 	}
 
-	checkWin = ()=>{
+	checkWin = (r,c)=>{
 		console.log("check...");
+		const checkRow = (row) => {
+			let bd = Object.assign(this.state.board);
+			if(bd[row][0].imgSrc===bd[row][1].imgSrc && bd[row][1].imgSrc===bd[row][2].imgSrc) {
+				return true;
+			}
+			return false;
+		}
+		const checkCol = (col) => {
+			let bd = Object.assign(this.state.board);
+			if(bd[0][col].imgSrc===bd[1][col].imgSrc && bd[1][col].imgSrc===bd[2][col].imgSrc) {
+				return true;
+			}
+			return false;
+		}
+		return checkRow(r) || checkCol(c);
 	}
 
 	onChange = (row,col)=>{
@@ -40,9 +55,20 @@ class GameView extends React.Component {
 		bd[row][col].display = "initial";
 
 		this.setState({
-			board:bd,
-			player:p
+			board: bd
 		});
+
+		if(this.checkWin(row,col)) {
+			setTimeout(()=>{
+				let pName = (this.state.player ? "Decepticons" : "Autobots");
+				alert(`${pName} Win!`);
+				this.reset();
+			},0);
+		} else {
+			this.setState({
+				player:p
+			});
+		}
 	}
 
 	reset = ()=>{
@@ -62,10 +88,14 @@ class GameView extends React.Component {
 
 
 	render = ()=>{
-		let boardStyle = {width:800,height:400,margin:"auto auto",border:"thin solid black",boxSizing:"border-box",paddingTop:30};
+		let boardStyle = {width:800,height:450,margin:"auto auto",border:"thin solid black",boxSizing:"border-box",paddingTop:15};
 		let resetStyle = {display:"block",width:100,height:30,margin:"auto auto",marginTop:20,fontSize:20,fontWeight:"bold"};
 
+		let pTitle = (this.state.player ? "Decepticons Rise Up" : "Autobots Roll Out");
+		let pStyle = {color:(this.state.player ? "blue" : "red"),textAlign:"center", marginBottom:25};
+
 		return 	<div style={boardStyle}>
+					<h1 style={pStyle}>{pTitle}</h1>
 					{this.state.board.map((el,idx)=>{
 						let setKey = idx+"-"+Math.floor(Math.random()*1000000);
 						return <Row boxes={this.state.board[idx]} key={setKey} changeFunc={this.onChange} />
@@ -100,6 +130,10 @@ const Box = (props)=>{
 	}
 
 	return  <div style={boxStyle} onClick={addSymbol}><img src={props.imgSrc} style={imgStyle} alt={props.imgSrc} /></div>
+}
+
+const ScoreBoard = (props)=>{
+	return <div></div>
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
