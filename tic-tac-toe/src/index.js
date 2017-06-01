@@ -22,7 +22,7 @@ class GameView extends React.Component {
 	}
 
 	checkWin = (r,c)=>{
-		console.log("check...");
+		let bd = Object.assign(this.state.board);
 		const checkRow = (row) => {
 			let bd = Object.assign(this.state.board);
 			if(bd[row][0].imgSrc===bd[row][1].imgSrc && bd[row][1].imgSrc===bd[row][2].imgSrc) {
@@ -31,13 +31,26 @@ class GameView extends React.Component {
 			return false;
 		}
 		const checkCol = (col) => {
-			let bd = Object.assign(this.state.board);
 			if(bd[0][col].imgSrc===bd[1][col].imgSrc && bd[1][col].imgSrc===bd[2][col].imgSrc) {
 				return true;
 			}
 			return false;
 		}
-		return checkRow(r) || checkCol(c);
+		const checkDiag = ()=>{
+			let center = bd[1][1];
+			if(center.imgSrc==="") {
+				return false;
+			}
+			if(bd[0][0].imgSrc===center.imgSrc && center.imgSrc===bd[2][2].imgSrc) {
+				return true;
+			}
+			if(bd[0][2].imgSrc===center.imgSrc && center.imgSrc===bd[2][0].imgSrc) {
+				return true;
+			}
+			return false
+		}
+
+		return checkRow(r) || checkCol(c) || checkDiag();
 	}
 
 	onChange = (row,col)=>{
@@ -90,16 +103,24 @@ class GameView extends React.Component {
 	render = ()=>{
 		let boardStyle = {width:800,height:450,margin:"auto auto",border:"thin solid black",boxSizing:"border-box",paddingTop:15};
 		let resetStyle = {display:"block",width:100,height:30,margin:"auto auto",marginTop:20,fontSize:20,fontWeight:"bold"};
-
+		let divStyle = {display:"inline-block",verticalAlign:"top"};
 		let pTitle = (this.state.player ? "Decepticons Rise Up" : "Autobots Roll Out");
 		let pStyle = {color:(this.state.player ? "blue" : "red"),textAlign:"center", marginBottom:25};
 
 		return 	<div style={boardStyle}>
 					<h1 style={pStyle}>{pTitle}</h1>
-					{this.state.board.map((el,idx)=>{
-						let setKey = idx+"-"+Math.floor(Math.random()*1000000);
-						return <Row boxes={this.state.board[idx]} key={setKey} changeFunc={this.onChange} />
-					})}
+					<div style={divStyle}>
+						<ScoreBoard />
+					</div>
+					<div style={divStyle}>
+						{this.state.board.map((el,idx)=>{
+							let setKey = idx+"-"+Math.floor(Math.random()*1000000);
+							return <Row boxes={this.state.board[idx]} key={setKey} changeFunc={this.onChange} />
+						})}
+					</div>
+					<div style={divStyle}>
+						<ScoreBoard />
+					</div>
 					<button style={resetStyle} onClick={this.reset}>RESET</button>
 				</div>;
 	}
@@ -133,7 +154,8 @@ const Box = (props)=>{
 }
 
 const ScoreBoard = (props)=>{
-	return <div></div>
+	let scoreStyle = {width:239,height:400,border:"thin solid red",display:"inline-block",verticalAlign:"top"};
+	return <div style={scoreStyle}></div>
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
