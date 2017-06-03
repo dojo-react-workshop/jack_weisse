@@ -7,8 +7,8 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      todos:[{text:"start",checked:false}],
-      numActive:1,
+      todos:[], // todo = {text: "Todo Name", checked: false}
+      numActive:0,
       filter: "all"
     }
   }
@@ -56,7 +56,31 @@ class App extends Component {
   }
 
   setFilter = (val)=>{
-    console.log(val);
+    this.setState({
+      filter: val
+    });
+  }
+
+  clear = ()=>{
+    let temp = [];
+    for(let i = 0; i < this.state.todos.length; i++) {
+      if(!this.state.todos[i].checked) {
+        temp.push(this.state.todos[i]);
+      }
+    }
+
+    this.setState({
+      todos: temp
+    });
+
+  }
+
+  update = (str,idx)=>{
+    let temp = this.state.todos.slice();
+    temp[idx].text = str;
+    this.setState({
+      todos:temp
+    });
   }
 
   render() {
@@ -71,11 +95,22 @@ class App extends Component {
             <ul className="todo-list">
               {this.state.todos.map((el,idx)=>{
                 let key = idx+el.text;
-                return (<TodoItem text={el.text} key={key} idx={idx} complete={el.checked} remove={this.remove} toggle={this.toggleComplete} />);
+                if(this.state.filter === "all") {
+                  return (<TodoItem text={el.text} key={key} idx={idx} complete={el.checked} remove={this.remove} toggle={this.toggleComplete} update={this.update} />);
+                } else if(this.state.filter === "active") {
+                  if(!el.checked) {
+                    return (<TodoItem text={el.text} key={key} idx={idx} complete={el.checked} remove={this.remove} toggle={this.toggleComplete} update={this.update} />);
+                  }
+                } else if(this.state.filter === "complete") {
+                  if(el.checked) {
+                    return (<TodoItem text={el.text} key={key} idx={idx} complete={el.checked} remove={this.remove} toggle={this.toggleComplete} update={this.update} />);
+                  }
+                }
+                return undefined;
               })}
             </ul>
           </section>
-          <Filters numTodos={this.state.todos.length} numActive={this.state.numActive} setFilter={this.setFilter} />
+          <Filters numTodos={this.state.todos.length} numActive={this.state.numActive} filter={this.state.filter} setFilter={this.setFilter} clear={this.clear} />
         </section>
       </div>
     );

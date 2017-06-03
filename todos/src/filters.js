@@ -7,9 +7,13 @@ class Filters extends Component {
 		this.props.setFilter(e.target.value);
 	}
 
+	clear = ()=>{
+		this.props.clear();
+	}
+
 	render() {
 		let filterClass = "hidden";
-		let text = "";
+		let text = " items left";
 		if(this.props.numTodos > 0) {
 			filterClass = "footer";
 			if(this.props.numTodos === 1) {
@@ -19,21 +23,32 @@ class Filters extends Component {
 			}
 		}
 
+		let allClass = "";
+		let activeClass = "";
+		let completeClass = "";
+		if(this.props.filter==="all") {
+			allClass = "selected";
+		} else if(this.props.filter==="active") {
+			activeClass = "selected";
+		} else if(this.props.filter==="complete") {
+			completeClass = "selected";
+		}
+
 		return (
 			<footer className={filterClass}>
 	            <span className="todo-count"><strong>{this.props.numActive}</strong>{text}</span>
 	            <ul className="filters">
 		            <li>
-		            	<a className="selected"><button onClick={this.setFilter} value="all">All</button></a>
+		            	<a className={allClass}><button onClick={this.setFilter} value="all">All</button></a>
 		            </li>
 		            <li>
-		            	<a><button onClick={this.setFilter} value="active">Active</button></a>
+		            	<a className={activeClass}><button onClick={this.setFilter} value="active">Active</button></a>
 		            </li>
 		            <li>
-		            	<a><button onClick={this.setFilter} value="complete">Completed</button></a>
+		            	<a className={completeClass}><button onClick={this.setFilter} value="complete">Completed</button></a>
 		            </li>
 	            </ul>
-	            <button className="clear-completed">Clear completed</button>
+	            <button className="clear-completed" onClick={this.clear}>Clear completed</button>
             </footer>
 		);
 	}
