@@ -15,6 +15,9 @@ class Footer extends Component {
 	      if(me.state.count===1) {
 	        clearInterval(interval);
 	        me.props.memorize();
+	        me.setState({
+	        	count:3
+	        });
 	      } else {
 	        me.setState({
 	          count:me.state.count-1
@@ -37,6 +40,8 @@ class Footer extends Component {
 			return (<div></div>);
 		} else if(this.props.gameState==="guess") {
 			return (<button onClick={this.validate}>Submit Answers</button>);
+		} else if(this.props.gameState==="results") {
+			return (<button onClick={this.startGame}>Restart</button>);
 		} else {
 			return (<div>TODO</div>);
 		}

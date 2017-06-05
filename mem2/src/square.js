@@ -2,20 +2,13 @@ import React, { Component } from 'react';
 
 class Square extends Component {
 
-	state = {
-		selected:false
-	}
-
 	toggle = ()=>{
 		if(this.props.gameState==="guess") {
-			if(!this.state.selected) {
+			if(!this.props.selected) {
 				this.props.add(this.props.idx);
-			} else if(this.state.selected) {
+			} else if(this.props.selected) {
 				this.props.remove(this.props.idx);
 			}
-			this.setState({
-				selected:!this.state.selected
-			});
 		}
 	}
 
@@ -29,7 +22,7 @@ class Square extends Component {
   		style.backgroundColor = "pink";
   	}
 
-  	if(this.state.selected) {
+  	if(this.props.selected && this.props.gameState==="guess") {
   		style.backgroundColor = "orange";
   	}
 
