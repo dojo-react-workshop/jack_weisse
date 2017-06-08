@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Redux Counter</title>
+		<script type="text/javascript">
+			function createStore(reducer) {
+				let state = reducer({},{});
+				const listeners = [];
+
+				function runCallbacks() {
+					listeners.forEach((cb)=>{
+						cb();
+					});
+				}
+
+				return {
+					getState: (key)=>{ 
+						return state[key]; 
+					},
+					subscribe: (cb)=>{
+						listeners.push(cb);
+					},
+					dispatch: (action)=>{
+						state = reducer(state,action);
+						runCallbacks();
+					}
+				};
+			}
+		</script>
+	</head>
+	<body>
+		<h1 id="count"></h1>
+		<button id="inc">Increment</button>
+		<button id="dec">Decrement</button>
+		<script type="text/javascript">
+
+			function reducer(oldState,action) {
+				const newState = Object.assign({}, oldState);
+				switch(action.type) {
+					case "INC":
+						newState.count = oldState.count+1;
+						break;
+					case "DEC":
+						newState.count = oldState.count-1;
+						break;
+					default:
+						newState.count = 0;
+						break;
+				}
+				return newState;
+			}
+
+			const store = createStore(reducer);
+
+			const counter = document.getElementById("count");
+
+			function render() {
+				counter.innerHTML = store.getState("count");
+			}
+
+			store.subscribe(render);
+			store.dispatch({type:"INIT"});
+
+			document.getElementById("inc").onclick = function inc() {
+				store.dispatch({type:"INC"});
+			}
+
+			document.getElementById("dec").onclick = function dec() {
+				store.dispatch({type:"DEC"});
+			}
+		</script>
+	</body>
+</html>
