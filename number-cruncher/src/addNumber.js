@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+const LOWERLIMIT = 0;
+const UPPERLIMIT = 100;
 
 class AddNumber extends Component {
 
 	state = {
-		newNumber: 0
+		newNumber: LOWERLIMIT
 	}
 
 	handleTextInput = ({target:{value}})=>{
 		const newValue = Number(value)
-		if(!isNaN(newValue) && newValue >= 0 && newValue <= 100) {
+		if(!isNaN(newValue) && newValue >= LOWERLIMIT && newValue <= UPPERLIMIT) {
 			this.setState({
 				newNumber: newValue
 			});
